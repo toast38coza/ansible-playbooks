@@ -1,0 +1,7 @@
+- hosts: TAM
+  remote_user: root
+  roles:
+    - roles/toast38coza.djangoapp
+  
+  include: djangoserver.yml
+  include: postgresqlserver.yml

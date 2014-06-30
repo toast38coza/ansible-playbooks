@@ -1,0 +1,27 @@
+[localhost]
+localhost ansible_connection=local
+
+[rackspace]
+
+[digitalocean]
+162.243.147.202
+
+[aws]
+
+[ghostservers]
+[djangoservers]
+162.243.147.202
+
+[postgresqlservers]
+162.243.147.202
+
+[mysqlservers]
+[railsservers]
+[magentoservers]
+[spreeservers]
+[serviceservers]
+[jenkinsservers]
+
+## sites: 
+[TAM]
+162.243.147.202

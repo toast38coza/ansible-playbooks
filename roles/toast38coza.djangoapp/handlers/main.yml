@@ -1,0 +1,2 @@
+- name: restart app
+  command: restart {{djangoapp_projectname}}    

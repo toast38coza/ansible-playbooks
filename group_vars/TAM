@@ -1,0 +1,29 @@
+postgresql_databases:
+  - name: tam
+
+postgresql_users:
+  - name: tam
+    pass: tam
+    encrypted: no       # denotes if the password is already encrypted.
+
+postgresql_user_privileges:
+  - name: tam          # user name
+    db: tam            # database
+    priv: "ALL"        # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+
+## maybe these should be a list ..
+
+djangoapp_repo: git@github.com:TangentSolutions/TAM.git
+djangoapp_track_branch: master
+djangoapp_projectname: tam
+djangoapp_domains: tam.tangentdirect.info
+djangoapp_pythonversion: 2.7
+djangoapp_httpport: 8001
+djangoapp_domains: tam.tangentdirect.info
+
+## settings:
+djangoapp_db_engine: postgresql_psycopg2
+djangoapp_db_name: tam
+djangoapp_db_user: tam
+djangoapp_db_pass: tam
+djangoapp_db_host: 127.0.0.1

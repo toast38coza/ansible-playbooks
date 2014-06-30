@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Provision Droplet
+      digital_ocean: >
+        state="present"
+        ssh_key_ids="{{do_ssh_key}}"
+        name="{{do_name}}"
+        client_id="{{do_client_id}}"
+        api_key="{{do_api_key}}"
+        size_id="{{do_size}}"
+        region_id="{{do_region_id}}"
+        image_id="{{do_image_id}}"
+      register: my_droplet
+    - debug: msg="ID is {{ my_droplet.droplet.id }}"
+    - debug: msg="IP is {{ my_droplet.droplet.ip_address }}"

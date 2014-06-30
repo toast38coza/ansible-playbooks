@@ -1,0 +1,5 @@
+start on started network
+stop on stopping network
+
+chdir /var/www/{{djangoapp_projectname}}/
+exec /srv/venvs/{{djangoapp_projectname}}/bin/gunicorn -b 0.0.0.0:{{djangoapp_httpport}} {{djangoapp_projectname}}.wsgi

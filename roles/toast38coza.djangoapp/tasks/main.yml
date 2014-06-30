@@ -1,0 +1,63 @@
+- name: install required packages
+  apt: pkg={{ item.name }} state=installed
+  with_items:
+    - {'name': 'git'}
+    - {'name': 'libpq-dev'}
+  tags:
+    - install
+
+- name: Create required directories
+  file: path={{item.path}} state=directory
+  with_items:
+    - { path : '/var/www/' }
+    - { path : '/srv/venvs/' }
+    - { path : '/var/log/gunicorn/' }
+    - { path : '/var/log/nginx/{{djangoapp_projectname}}' }
+    - { path : '/var/log/gunicorn/' }
+  tags:
+    - install
+
+- name: Upload SSH key.
+  copy: src=~/.ssh/id_rsa dest=~/.ssh/id_rsa mode=0600
+  tags:
+    - install
+
+- name: Upload config templates
+  template: src={{item.src}} dest={{item.dest}}
+  with_items:
+    - { src : 'server_block', dest: '/etc/nginx/sites-enabled/{{djangoapp_projectname}}' }
+    - { src : 'upstart', dest: '/etc/init/{{djangoapp_projectname}}.conf' }
+    - { src : 'local_settings.py', dest: '/var/www/{{djangoapp_projectname}}/{{djangoapp_projectname}}/local_settings.py' }    
+  tags:
+    - install
+
+- name: Update code from git.
+  git: repo={{djangoapp_repo}}
+       dest=/var/www/{{djangoapp_projectname}}
+       version={{djangoapp_track_branch}}
+       accept_hostkey=yes
+  tags:
+    - install
+    - deploy
+
+- name: Install requirements
+  pip: requirements=/var/www/{{djangoapp_projectname}}/requirements.txt virtualenv=/srv/venvs/{{djangoapp_projectname}}
+  tags:
+    - install
+    - deploy
+
+
+- name: Run syncdb
+  django_manage: command=syncdb app_path=/var/www/{{djangoapp_projectname}}/ virtualenv=/srv/venvs/{{djangoapp_projectname}}
+  tags:
+    - install
+    - deploy
+
+- name: Run collectstatic
+  django_manage: command=collectstatic app_path=/var/www/{{djangoapp_projectname}}/ virtualenv=/srv/venvs/{{djangoapp_projectname}}
+  notify: restart app
+  tags:
+    - install
+    - deploy
+
+    
